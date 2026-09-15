@@ -36,6 +36,21 @@ curl -k -H "Content-Type: application/json" -X PUT --data-binary @/tmp/ns.json h
 ```
  - [Namespaces stuck in Terminating state](https://github.com/Azure/AKS/issues/733#issuecomment-583714454)
 
+ - finding out right pseudo-version (vX.Y.Z-<timestamp>-<commit>) of required package
+```
+TZ=UTC 
+git --no-pager show \
+  --quiet \
+  --abbrev=12 \
+  --date='format-local:%Y%m%d%H%M%S' \
+  --format="%cd-%h"
+```
+
+ - get diff from a pull request
+```
+git fetch upstream pull/3039/head:3039
+```
+
 ### Links
  - [Common Kubernetes Ports](https://kubernetes.io/docs/setup/independent/install-kubeadm/#check-required-ports)
  - [All Kubernetes Ports in code](https://github.com/kubernetes/kubernetes/blob/99e61466ab694b3652db2c063b9996a5d324a57a/pkg/master/ports/ports.go#L43)
@@ -116,5 +131,68 @@ helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 helm install jupyterhub/jupyterhub --version 1.2.0 --generate-name
 ```
  
- #### Cloud Native
+#### Cloud Native
   - [Future of Cloud Native](https://jimmysong.io/kubernetes-handbook/cloud-native/the-future-of-cloud-native.html)
+
+#### go env setting
+  - install go
+```
+Install go:
+https://golang.org/doc/install
+
+wget -O /tmp/go1.24.5.linux-amd64.tar.gz https://storage.googleapis.com/golang/go1.24.5.linux-amd64.tar.gz
+cd /tmp/
+tar -xvf /tmp/go1.24.5.linux-amd64.tar.gz
+
+cd /usr/local/
+mv go go-1.22.4
+
+mv /tmp/go /usr/local/ 
+cp /usr/local/go/bin/go /usr/bin/
+```
+  - set go env
+```
+export GOPATH=~/go
+export GOROOT=/usr/local/go
+export PATH=$PATH:$GOPATH/bin:/usr/local/go/bin:/root/go/src/k8s.io/kubernetes/third_party/etcd:~/tectonic/tectonic/tectonic-installer/linux/:/root/go/src/k8s.io/kubernetes/third_party/etcd
+export working_dir=~/go/src/k8s.io/kubernetes
+export csi_file=~/go/src/sigs.k8s.io/azurefile-csi-driver
+export csi_disk=~/go/src/sigs.k8s.io/azuredisk-csi-driver
+export csi_lustre=~/go/src/sigs.k8s.io/azurelustre-csi-driver
+export csi_blob=~/go/src/sigs.k8s.io/blob-csi-driver
+export csi_goofys=~/go/src/github.com/csi-driver/goofys-csi-driver
+export csi_smb=~/go/src/github.com/kubernetes-csi/csi-driver-smb
+export csi_nfs=~/go/src/github.com/kubernetes-csi/csi-driver-nfs
+export csi_iscsi=~/go/src/github.com/kubernetes-csi/csi-driver-iscsi
+export csi_proxy=~/go/src/github.com/kubernetes-csi/csi-proxy
+export aks_rp=~/go/src/goms.io/aks/rp
+export user=andyzhangx
+export acs_dir=~/go/src/github.com/Azure/acs-engine
+export aks_engine=~/go/src/github.com/Azure/aks-engine
+export azure_cli=~/go/src/github.com/Azure/azure-cli
+export test_infra=~/go/src/github.com/kubernetes/test-infra
+export kaito=~/go/src/github.com/kaito-project/kaito
+export keda=~/go/src/github.com/kaito-project/keda-kaito-scaler
+/usr/bin/git config --global user.email "xiazhang@microsoft.com"
+/usr/bin/git config --global user.name "andyzhangx"
+/usr/bin/git config core.editor "vim"
+export git_push="git push origin master"
+export git_commit="git commit -a"
+export GITHUB_USER=andyzhangx
+export azure=~/go/src/github.com/kubernetes-sigs/cloud-provider-azure
+export local=~/go/src/github.com/kubernetes-sigs/sig-storage-local-static-provisioner
+export blobfuse=~/go/src/github.com/Azure/azure-storage-fuse
+export agentbaker=~/go/src/github.com/Azure/AgentBaker
+export spec=~/go/src/github.com/container-storage-interface/spec
+export azure_volume=~/go/src/github.com/Azure/kubernetes-volume-drivers
+export dalec=~/go/src/github.com/Azure/dalec-build-defs
+export lws=~/go/src/sigs.k8s.io/lws
+alias k="kubectl"
+```
+
+#### git command
+  - fetch a specific pull request
+```
+git fetch upstream pull/3141/head:3141
+git checkout 3141
+```
